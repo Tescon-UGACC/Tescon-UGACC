@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration | TESCON UGACC</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <h1>TESCON UGACC</h1>
+      <p>Commitment Without Inducement</p>
+    </div>
+  </header>
+
+  <main class="welcome">
+    <h2>Membership Registration</h2>
+    <p>Complete the form to apply for TESCON UGACC membership.</p>
+
+    <form id="registerForm">
+      <label for="name">Full name</label>
+      <input id="name" name="name" type="text" autocomplete="name" required>
+
+      <label for="gender">Gender</label>
+      <select id="gender" name="gender" required>
+        <option value="">Select gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Prefer not to say">Prefer not to say</option>
+      </select>
+
+      <label for="phone">WhatsApp phone number</label>
+      <input id="phone" name="phone" type="tel" autocomplete="tel" required>
+
+      <label for="email">Email address</label>
+      <input id="email" name="email" type="email" autocomplete="email" required>
+
+      <label for="studentId">Student ID number</label>
+      <input id="studentId" name="studentId" type="text" required>
+
+      <label for="programme">Programme of study</label>
+      <input id="programme" name="programme" type="text" required>
+
+      <label for="level">Current level</label>
+      <select id="level" name="level" required>
+        <option value="">Select level</option>
+        <option value="100">Level 100</option>
+        <option value="200">Level 200</option>
+        <option value="300">Level 300</option>
+        <option value="400">Level 400</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="region">Region</label>
+      <select id="region" name="region" required>
+        <option value="">Select region</option>
+        <option>Ahafo</option>
+        <option>Ashanti</option>
+        <option>Bono</option>
+        <option>Bono East</option>
+        <option>Central</option>
+        <option>Eastern</option>
+        <option>Greater Accra</option>
+        <option>North East</option>
+        <option>Northern</option>
+        <option>Oti</option>
+        <option>Savannah</option>
+        <option>Upper East</option>
+        <option>Upper West</option>
+        <option>Volta</option>
+        <option>Western</option>
+        <option>Western North</option>
+      </select>
+
+      <label for="constituency">Constituency</label>
+      <input id="constituency" name="constituency" type="text" required>
+
+      <label for="photo">Profile photo (optional)</label>
+      <input id="photo" name="photo" type="file" accept="image/*">
+
+      <p>
+        <label>
+          <input type="checkbox" name="confirmStudent" required>
+          I confirm that the information I have provided is accurate.
+        </label>
+      </p>
+
+      <p>
+        <label>
+          <input type="checkbox" name="consent" required>
+          I consent to my information being used to process my membership application.
+        </label>
+      </p>
+
+      <button class="button button-primary" type="submit">
+        Submit Application
+      </button>
+
+      <p id="registerMessage" role="status" aria-live="polite"></p>
+    </form>
+
+    <p>Already registered? <a href="login.html">Sign in</a>.</p>
+    <p><a href="index.html">Back to home</a></p>
+  </main>
+</body>
+</html>

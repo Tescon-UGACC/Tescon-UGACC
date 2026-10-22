@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register | TESCON UGACC</title><link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header"><div><h1>TESCON UGACC</h1><p>Commitment Without Inducement</p></div></header>
+<main class="welcome">
+<h2>Student Membership Registration</h2><p>For University of Ghana, Accra City Campus students.</p>
+<form id="registerForm">
+<label for="name">Full name</label><input id="name" required maxlength="150">
+<label for="gender">Gender</label><select id="gender" required><option value="">Select gender</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select>
+<label for="phone">WhatsApp number</label><input id="phone" type="tel" required maxlength="30">
+<label for="email">Email address</label><input id="email" type="email" required autocomplete="email">
+<label for="password">Create password</label><input id="password" type="password" minlength="8" required autocomplete="new-password"><small>Use at least 8 characters.</small>
+<label for="studentId">Student ID</label><input id="studentId" required maxlength="50">
+<label for="programme">Programme</label><input id="programme" required maxlength="150">
+<label for="level">Level</label><select id="level" required><option value="">Select level</option><option value="100">Level 100</option><option value="200">Level 200</option><option value="300">Level 300</option><option value="400">Level 400</option><option value="Other">Other</option></select>
+<label for="region">Region</label><select id="region" required><option value="">Select region</option><option>Ahafo</option><option>Ashanti</option><option>Bono</option><option>Bono East</option><option>Central</option><option>Eastern</option><option>Greater Accra</option><option>North East</option><option>Northern</option><option>Oti</option><option>Savannah</option><option>Upper East</option><option>Upper West</option><option>Volta</option><option>Western</option><option>Western North</option></select>
+<label for="constituency">Constituency</label><input id="constituency" required maxlength="100">
+<label class="check"><input id="confirmDetails" type="checkbox" required> I confirm that the information provided is correct.</label>
+<label class="check"><input id="consent" type="checkbox" required> I consent to my information being used to manage my TESCON UGACC membership.</label>
+<button class="button button-primary" type="submit">Create Account and Register</button><p id="registerMessage" role="status" aria-live="polite"></p>
+</form><p>Already registered? <a href="login.html">Sign in</a>.</p><p><a href="index.html">Back to Home</a></p>
+</main>
+<script type="module">
+import { signUp } from "./js/auth.js";
+import { submitApplication } from "./js/student.js";
+const form = document.getElementById("registerForm"), message = document.getElementById("registerMessage");
+form.addEventListener("submit", async (event) => {
+ event.preventDefault(); const button = form.querySelector("button"); button.disabled = true; message.textContent = "Creating your account...";
+ try {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const application = {
+   name: document.getElementById("name").value.trim(),
+   gender: document.getElementById("gender").value,
+   phone: document.getElementById("phone").value.trim(),
+   studentId: document.getElementById("studentId").value.trim(),
+   programme: document.getElementById("programme").value.trim(),
+   level: document.getElementById("level").value,
+   region: document.getElementById("region").value,
+   constituency: document.getElementById("constituency").value.trim()
+  };
+  const result = await signUp(email, password);
+  if (!result.session) {
+   message.textContent = "Account created. Check your email to confirm it, then sign in. After signing in, return here to complete your application.";
+   return;
+  }
+  await submitApplication({...application, email});
+  message.textContent = "Application submitted. Your status is pending admin approval.";
+  form.reset();
+ } catch (error) { message.textContent = error.message || "Registration failed. Please try again."; }
+ finally { button.disabled = false; }
+});
+</script>
+</body></html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My Membership | TESCON UGACC</title><link rel="stylesheet" href="css/style.css"></head>
+<body><header class="site-header"><div><h1>TESCON UGACC</h1><p>Student Portal</p></div></header>
+<main class="welcome"><h2 id="studentWelcome">My Membership</h2><p id="applicationMessage" role="status">Loading your application...</p><section class="status-card"><p>Application status</p><h3 id="applicationStatus">Loading...</h3><p id="applicationDetails"></p></section><div class="actions"><a class="button button-secondary" href="register.html">Complete Application</a><button class="button button-primary" id="logoutButton">Sign Out</button></div></main>
+<script type="module">
+import { getCurrentUser, signOut } from "./js/auth.js";
+import { getMyApplication } from "./js/student.js";
+const msg=document.getElementById("applicationMessage");
+try {
+ const user=await getCurrentUser(); if(!user){location.href="login.html";}
+ else {
+  document.getElementById("studentWelcome").textContent="Welcome, "+(user.email||"student");
+  const app=await getMyApplication();
+  if(!app){document.getElementById("applicationStatus").textContent="Not submitted";msg.textContent="Your account is ready. Complete the registration form to submit your membership application."; }
+  else {document.getElementById("applicationStatus").textContent=app.status.toUpperCase();document.getElementById("applicationDetails").textContent=`Student ID: ${app.student_id} · Programme: ${app.programme} · Level: ${app.level}`;msg.textContent="Your application details are shown below.";}
+ }
+} catch(e){msg.textContent=e.message||"Could not load your application.";}
+document.getElementById("logoutButton").addEventListener("click",async()=>{await signOut();location.href="login.html";});
+</script></body></html>

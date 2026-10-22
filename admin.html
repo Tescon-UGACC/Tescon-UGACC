@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Admin Dashboard | TESCON UGACC</title><link rel="stylesheet" href="css/style.css"></head>
+<body><header class="site-header"><div><h1>TESCON UGACC</h1><p>Administrator Dashboard</p></div></header>
+<main class="welcome wide"><h2>Membership Applications</h2><p id="adminMessage" role="status">Loading applications...</p>
+<div class="stats"><div class="stat"><span>Total</span><strong id="totalCount">0</strong></div><div class="stat"><span>Pending</span><strong id="pendingCount">0</strong></div><div class="stat"><span>Approved</span><strong id="approvedCount">0</strong></div><div class="stat"><span>Rejected</span><strong id="rejectedCount">0</strong></div></div>
+<button class="button button-primary" id="exportButton">Export to Excel (CSV)</button>
+<div class="table-container"><table><thead><tr><th>Name</th><th>Student ID</th><th>Programme</th><th>Level</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead><tbody id="applicationsTable"></tbody></table></div>
+<button class="button button-secondary" id="logoutButton">Sign Out</button></main>
+<script type="module">
+import { getApplications, updateApplicationStatus, exportApplicationsToCSV, verifyAdmin } from "./js/admin.js";
+import { signOut } from "./js/auth.js";
+const msg=document.getElementById("adminMessage"), body=document.getElementById("applicationsTable");
+function cell(value){const td=document.createElement("td");td.textContent=value??"";return td;}
+async function load(){
+ try {
+  if(!(await verifyAdmin()))return;
+  const rows=await getApplications();
+  document.getElementById("totalCount").textContent=rows.length;
+  for(const s of ["pending","approved","rejected"])document.getElementById(s+"Count").textContent=rows.filter(r=>r.status===s).length;
+  body.replaceChildren();
+  rows.forEach(r=>{
+   const tr=document.createElement("tr");
+   [r.name,r.student_id,r.programme,r.level,r.phone,r.status].forEach(v=>tr.appendChild(cell(v)));
+   const actions=cell("");
+   if(r.status==="pending"){
+    for(const status of ["approved","rejected"]){const b=document.createElement("button");b.textContent=status==="approved"?"Approve":"Reject";b.className="small-button";b.addEventListener("click",async()=>{b.disabled=true;try{await updateApplicationStatus(r.id,status);await load();}catch(e){msg.textContent=e.message;} });actions.appendChild(b);}
+   }
+   tr.appendChild(actions);body.appendChild(tr);
+  });
+  msg.textContent=rows.length?"Applications loaded.":"No applications have been submitted yet.";
+ }catch(e){msg.textContent=e.message||"Could not load applications.";}
+}
+document.getElementById("exportButton").addEventListener("click",async()=>{try{await exportApplicationsToCSV();msg.textContent="Export started.";}catch(e){msg.textContent=e.message||"Export failed."; }});
+document.getElementById("logoutButton").addEventListener("click",async()=>{await signOut();location.href="login.html";});
+load();
+</script></body></html>
